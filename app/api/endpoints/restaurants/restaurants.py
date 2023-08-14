@@ -4,10 +4,9 @@ import uuid
 
 from app.schemas.restaurants import Restaurant, RestaurantResponse
 
-router = APIRouter()
+from app.storage import db
 
-# using a simple in memory db for now
-restaurants_storage = {}
+router = APIRouter()
 
 
 @router.post("/", response_model=RestaurantResponse)
@@ -16,7 +15,7 @@ def create_restaurant(restaurant: Restaurant):
 
     response = RestaurantResponse(**restaurant.model_dump())
     response.restaurant_id = str(uuid.uuid4())
-    restaurants_storage[response.restaurant_id] = response.model_dump()
+    db.restaurants[response.restaurant_id] = response.model_dump()
     return response
 
 
@@ -24,8 +23,8 @@ def create_restaurant(restaurant: Restaurant):
 def get_restaurant(restaurant_id: str):
     """Get a restaurant from the database"""
 
-    if restaurant_id in restaurants_storage:
-        return restaurants_storage[restaurant_id]
+    if restaurant_id in db.restaurants:
+        return db.restaurants[restaurant_id]
     else:
         raise HTTPException(
             status_code=404,
@@ -44,7 +43,7 @@ def get_restaurants_nearby(
     # Implement the logic to retrieve restaurants near the specified location within the given radius
     # For this example, we return the entire list of restaurants
     list_of_restaurants = []
-    for restaurant in restaurants_storage.values():
+    for restaurant in db.restaurants.values():
         list_of_restaurants.append(restaurant)
 
     return list_of_restaurants
@@ -54,30 +53,30 @@ def get_restaurants_nearby(
 def update_restaurant(restaurant_id: str, restaurant: Restaurant):
     """Update a restaurant in the database"""
 
-    if restaurant_id not in restaurants_storage:
+    if restaurant_id not in db.restaurants:
         raise HTTPException(
             status_code=404,
             detail=f"Restaurant with ID {restaurant_id} not found.",
         )
 
     # update the current restaurant
-    current = restaurants_storage[restaurant_id]
+    current = db.restaurants[restaurant_id]
     updated = restaurant.model_dump()
     for key, value in updated.items():
         if value is not None:
             current[key] = value
-    restaurants_storage[restaurant_id] = current
-    return restaurants_storage[restaurant_id]
+    db.restaurants[restaurant_id] = current
+    return db.restaurants[restaurant_id]
 
 
 @router.delete("/api/restaurants/{restaurant_id}", status_code=204)
 def delete_restaurant(restaurant_id: str):
     """Delete a restaurant from the database"""
 
-    if restaurant_id not in restaurants_storage:
+    if restaurant_id not in db.restaurants:
         raise HTTPException(
             status_code=404,
             detail=f"Restaurant with ID {restaurant_id} not found.",
         )
 
-    del restaurants_storage[restaurant_id]
+    del db.restaurants[restaurant_id]
