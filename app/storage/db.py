@@ -1,3 +1,4 @@
+# Using in memory data store for now
 users = {}
 restaurants = {}
 menu = {}
