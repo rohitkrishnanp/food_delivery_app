@@ -4,6 +4,7 @@ from app.api.endpoints.restaurants import restaurants
 from app.api.endpoints.restaurants import menu
 from app.api.endpoints.restaurants import menu_items
 from app.api.endpoints import orders
+from app.api.endpoints import ratings
 
 from app.auth.authorization import authorization_scheme
 
@@ -22,3 +23,5 @@ api_router.include_router(
 )
 
 api_router.include_router(orders.router, prefix="/orders", tags=["Orders"])
+
+api_router.include_router(ratings.router, tags=["Ratings"])

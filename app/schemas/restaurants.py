@@ -12,18 +12,8 @@ class Restaurant(BaseModel):
     description: str = None
     contact: str = None
     location: Location = None
+    rating: int = 5
 
 
 class RestaurantResponse(Restaurant):
     restaurant_id: str = None
-
-
-class Menu(BaseModel):
-    name: str = None
-    description: str = None
-
-
-class MenuResponse(Menu):
-    menu_id: str
-    restaurant_id: str
-    _links: Dict[str, Dict[str, str]]

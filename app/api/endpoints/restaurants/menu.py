@@ -8,7 +8,11 @@ from app.schemas.menu import Menu, MenuResponse
 router = APIRouter()
 
 
-@router.post("/{restaurant_id}/menus", response_model=MenuResponse)
+@router.post(
+    "/{restaurant_id}/menus",
+    response_model=MenuResponse,
+    response_model_exclude_none=True,
+)
 def create_menu(restaurant_id: str, menu: Menu):
     """Create a new menu for the specified restaurant."""
 
@@ -38,6 +42,7 @@ def create_menu(restaurant_id: str, menu: Menu):
 @router.get(
     "/{restaurant_id}/menus",
     response_model=List[MenuResponse],
+    response_model_exclude_none=True,
 )
 def get_menus(restaurant_id: str):
     """Retrieve all menus for the specified restaurant."""
@@ -58,6 +63,7 @@ def get_menus(restaurant_id: str):
 @router.get(
     "/{restaurant_id}/menus/{menu_id}",
     response_model=MenuResponse,
+    response_model_exclude_none=True,
 )
 def get_menu(restaurant_id: str, menu_id: str):
     """Retrieve the specified menu for the specified restaurant."""
@@ -77,6 +83,7 @@ def get_menu(restaurant_id: str, menu_id: str):
 @router.put(
     "/{restaurant_id}/menus/{menu_id}",
     response_model=MenuResponse,
+    response_model_exclude_none=True,
 )
 def update_menu(restaurant_id: str, menu_id: str, menu: Menu):
     """Update the specified menu for the specified restaurant."""

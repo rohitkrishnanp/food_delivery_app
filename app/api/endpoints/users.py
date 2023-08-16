@@ -11,7 +11,12 @@ from app.storage import db
 router = APIRouter()
 
 
-@router.post("/", status_code=201, response_model=UserResponse)
+@router.post(
+    "/",
+    status_code=201,
+    response_model=UserResponse,
+    response_model_exclude_none=True,
+)
 def add_user(user: UserRequest):
     """Add a new user to the database"""
 
@@ -27,7 +32,9 @@ def add_user(user: UserRequest):
     return user_response
 
 
-@router.get("/{user_id}", response_model=UserResponse)
+@router.get(
+    "/{user_id}", response_model=UserResponse, response_model_exclude_none=True
+)
 def get_user(user_id: str = Path(..., title="User ID")):
     """Get a user from the database"""
 
@@ -39,7 +46,12 @@ def get_user(user_id: str = Path(..., title="User ID")):
     return db.users[user_id]
 
 
-@router.post("/login", status_code=200, response_model=UserResponse)
+@router.post(
+    "/login",
+    status_code=200,
+    response_model=UserResponse,
+    response_model_exclude_none=True,
+)
 def login_user(user: UserLogin):
     """Login a user"""
 
@@ -53,7 +65,12 @@ def login_user(user: UserLogin):
     return login
 
 
-@router.put("/{user_id}", status_code=201, response_model=UserResponse)
+@router.put(
+    "/{user_id}",
+    status_code=201,
+    response_model=UserResponse,
+    response_model_exclude_none=True,
+)
 def update_user(user: UserRequest, user_id: str = Path(..., title="User ID")):
     """Update a user in the database"""
 

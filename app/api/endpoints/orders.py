@@ -7,7 +7,7 @@ from app.schemas.orders import Order
 router = APIRouter()
 
 
-@router.post("/", response_model=Order)
+@router.post("/", response_model=Order, response_model_exclude_none=True)
 def create_order(order: Order):
     """Create a new order in the database."""
 
@@ -25,7 +25,9 @@ def create_order(order: Order):
     return order_dict
 
 
-@router.get("/{order_id}", response_model=Order)
+@router.get(
+    "/{order_id}", response_model=Order, response_model_exclude_none=True
+)
 def get_order(order_id: str):
     """Get an order from the database."""
 
@@ -36,7 +38,7 @@ def get_order(order_id: str):
     return db.orders[order_id]
 
 
-@router.get("/", response_model=List[Order])
+@router.get("/", response_model=List[Order], response_model_exclude_none=True)
 def get_orders_for_customer(
     customer_id: str = Query(..., description="Customer ID")
 ):
@@ -50,7 +52,11 @@ def get_orders_for_customer(
     return orders
 
 
-@router.put("/order_id}/status/{status}", response_model=Order)
+@router.put(
+    "/order_id}/status/{status}",
+    response_model=Order,
+    response_model_exclude_none=True,
+)
 def update_order_status(
     order_id: str, status: str = Path(..., description="Status of the order")
 ):

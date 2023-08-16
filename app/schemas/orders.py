@@ -16,6 +16,7 @@ class Order(BaseModel):
     items: list[OrderItem] = None
     customer_location: Location = None
     payment_method: str = None
+    rating: int = 5
     total: float = None
     status: str = None
     _links: dict = None

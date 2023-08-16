@@ -10,6 +10,7 @@ router = APIRouter()
 @router.post(
     "/{restaurant_id}/menus/{menu_id}/items",
     response_model=MenuItemResponse,
+    response_model_exclude_none=True,
 )
 def create_menu_item(restaurant_id: str, menu_id: str, menu_item: MenuItem):
     """Create a new menu item for the specified menu."""
@@ -45,6 +46,7 @@ def create_menu_item(restaurant_id: str, menu_id: str, menu_item: MenuItem):
 @router.get(
     "/{restaurant_id}/menus/{menu_id}/items",
     response_model=List[MenuItemResponse],
+    response_model_exclude_none=True,
 )
 def get_menu_items(restaurant_id: str, menu_id: str):
     """Retrieve all menu items for the specified menu."""
@@ -68,6 +70,7 @@ def get_menu_items(restaurant_id: str, menu_id: str):
 @router.get(
     "/{restaurant_id}/menus/{menu_id}/items/{item_id}",
     response_model=MenuItemResponse,
+    response_model_exclude_none=True,
 )
 def get_menu_item(restaurant_id: str, menu_id: str, item_id: str):
     """Retrieve the specified menu item."""
@@ -88,6 +91,7 @@ def get_menu_item(restaurant_id: str, menu_id: str, item_id: str):
 @router.put(
     "/{restaurant_id}/menus/{menu_id}/items/{item_id}",
     response_model=MenuItemResponse,
+    response_model_exclude_none=True,
 )
 def update_menu_item(
     restaurant_id: str, menu_id: str, item_id: str, menu_item: MenuItem
