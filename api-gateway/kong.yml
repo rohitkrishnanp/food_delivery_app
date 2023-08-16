@@ -31,3 +31,13 @@
      paths:
      - /api/restaurants
      strip_path: false
+
+ - host: host.docker.internal
+   name: orders_service
+   port: 5003
+   protocol: http
+   routes:
+   - name: orders_service_route
+     paths:
+     - /api/orders
+     strip_path: false

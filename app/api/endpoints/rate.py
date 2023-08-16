@@ -7,7 +7,7 @@ from app.storage import db
 router = APIRouter()
 
 
-@router.post("/api/restaurants/{restaurant_id}/ratings")
+@router.post("/api/restaurants/{restaurant_id}/rate")
 def rate_restaurant(restaurant_id: str, rating: int = Query(..., ge=1, le=5)):
     """Rate a restaurant"""
 
@@ -19,7 +19,7 @@ def rate_restaurant(restaurant_id: str, rating: int = Query(..., ge=1, le=5)):
     return db.restaurants[restaurant_id]
 
 
-@router.post("/api/orders/{order_id}/ratings")
+@router.post("/api/orders/{order_id}/rate")
 def rate_order(order_id: str, rating: int = Query(..., ge=1, le=5)):
     """Rate an order"""
 
