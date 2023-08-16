@@ -1,5 +1,5 @@
 from fastapi import APIRouter, HTTPException, Query
-from fastapi import APIRouter, HTTPException
+from fastapi import HTTPException
 import uuid
 
 from app.schemas.restaurants import Restaurant, RestaurantResponse
@@ -69,7 +69,7 @@ def update_restaurant(restaurant_id: str, restaurant: Restaurant):
     return db.restaurants[restaurant_id]
 
 
-@router.delete("/api/restaurants/{restaurant_id}", status_code=204)
+@router.delete("/{restaurant_id}", status_code=204)
 def delete_restaurant(restaurant_id: str):
     """Delete a restaurant from the database"""
 

@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.api.api import api_router
+
 app = FastAPI(
     title="Food Delivery Application",
     description="Endpoints for Food Delivery Application",
@@ -17,6 +18,6 @@ app.add_middleware(
 app.include_router(api_router, prefix="/api")
 
 
-@app.get("/api/healthcheck", tags=["misc"])
+@app.get("/api/healthcheck", tags=["Healthcheck"])
 async def healthcheck():
     return {"status": "available"}
