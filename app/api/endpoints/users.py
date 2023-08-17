@@ -1,4 +1,5 @@
 from fastapi import APIRouter, HTTPException, Path
+from typing import List
 import uuid
 from app.schemas.users import (
     UserResponse,
@@ -20,14 +21,14 @@ router = APIRouter()
 def add_user(user: UserRequest):
     """Add a new user to the database"""
 
-    if user.email in db.users:
-        raise HTTPException(
-            status_code=409, detail="User with this email already exists"
-        )
+    for _, db_user in db.users.items():
+        if db_user["email"] == user.email:
+            raise HTTPException(
+                status_code=409, detail="User with this email already exists"
+            )
 
     user_response = UserResponse(**user.model_dump())
     user_response.id = str(uuid.uuid4())
-    db.users[user_response.email] = user_response.model_dump()
     db.users[user_response.id] = user_response.model_dump()
     return user_response
 
@@ -46,20 +47,38 @@ def get_user(user_id: str = Path(..., title="User ID")):
     return db.users[user_id]
 
 
+@router.get(
+    "/", response_model=List[UserResponse], response_model_exclude_none=True
+)
+def get_all_users():
+    """Get a user from the database"""
+
+    users = []
+    for _, user in db.users.items():
+        users.append(user)
+    return users
+
+
 @router.post(
     "/login",
     status_code=200,
-    response_model=UserResponse,
+    response_model=UserLoginResponse,
     response_model_exclude_none=True,
 )
 def login_user(user: UserLogin):
     """Login a user"""
 
-    if user.email not in db.users:
+    email_found = False
+    for _, db_user in db.users.items():
+        if db_user["email"] == user.email:
+            email_found = True
+
+    if not email_found:
         raise HTTPException(
             status_code=401,
             detail="Invalid email or password. Please try again",
         )
+
     login = UserLoginResponse(**user.model_dump())
     login.token = str(uuid.uuid4())
     return login
@@ -99,6 +118,4 @@ def delete_user(user_id: str = Path(..., title="User ID")):
             status_code=404, detail=f"User with ID {user_id} not found."
         )
 
-    email = db.users[user_id]["email"]
     del db.users[user_id]
-    del db.users[email]

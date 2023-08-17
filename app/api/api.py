@@ -9,7 +9,6 @@ from app.api.endpoints import rate
 from app.auth.authorization import authorization_scheme
 
 api_router = APIRouter(dependencies=[Depends(authorization_scheme)])
-api_router = APIRouter()
 
 api_router.include_router(users.router, prefix="/users", tags=["Users"])
 api_router.include_router(
