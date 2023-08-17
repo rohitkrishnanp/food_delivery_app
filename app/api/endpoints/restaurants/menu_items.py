@@ -9,6 +9,7 @@ router = APIRouter()
 
 @router.post(
     "/{restaurant_id}/menus/{menu_id}/items",
+    status_code=201,
     response_model=MenuItemResponse,
     response_model_exclude_none=True,
 )
@@ -20,7 +21,7 @@ def create_menu_item(restaurant_id: str, menu_id: str, menu_item: MenuItem):
         and db.menu[menu_id]["restaurant_id"] == restaurant_id
     ):
         item_id = str(uuid.uuid4())
-        menu_item_dict = menu_item.model.dumps()
+        menu_item_dict = menu_item.model_dump()
         menu_item_dict["item_id"] = item_id
         menu_item_dict["menu_id"] = menu_id
         menu_item_dict["restaurant_id"] = restaurant_id
@@ -103,7 +104,7 @@ def update_menu_item(
         and item_id in db.menu_items
     ):
         current = db.menu_items[item_id]
-        updated = menu_item.model.dumps()
+        updated = menu_item.model_dump()
         for key, value in updated.items():
             if value is not None:
                 current[key] = value

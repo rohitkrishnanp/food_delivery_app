@@ -18,5 +18,9 @@ class Order(BaseModel):
     payment_method: str = None
     rating: int = 5
     total: float = None
-    status: str = None
+    status: str = "pending"
     _links: dict = None
+
+
+class OrderResponse(Order):
+    order_id: str = None

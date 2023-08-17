@@ -23,8 +23,8 @@ def rate_restaurant(restaurant_id: str, rating: int = Query(..., ge=1, le=5)):
 def rate_order(order_id: str, rating: int = Query(..., ge=1, le=5)):
     """Rate an order"""
 
-    if order_id not in db.order_id:
-        raise HTTPException(status_code=404, detail="Restaurant not found")
+    if order_id not in db.orders:
+        raise HTTPException(status_code=404, detail="Order not found")
     # for simplicity directly adding the rating
     db.orders[order_id]["rating"] = rating
     return db.orders[order_id]

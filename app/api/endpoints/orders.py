@@ -2,18 +2,23 @@ from fastapi import APIRouter, HTTPException, Query, Path
 from typing import Dict, List
 import uuid
 from app.storage import db
-from app.schemas.orders import Order
+from app.schemas.orders import Order, OrderResponse
 
 router = APIRouter()
 
 
-@router.post("/", response_model=Order, response_model_exclude_none=True)
+@router.post(
+    "/",
+    status_code=201,
+    response_model=OrderResponse,
+    response_model_exclude_none=True,
+)
 def create_order(order: Order):
     """Create a new order in the database."""
 
     order_id = str(uuid.uuid4())
 
-    order_dict = order.model_dumps()
+    order_dict = order.model_dump()
     order_dict["order_id"] = order_id
 
     # Define _links for the response
@@ -26,7 +31,9 @@ def create_order(order: Order):
 
 
 @router.get(
-    "/{order_id}", response_model=Order, response_model_exclude_none=True
+    "/{order_id}",
+    response_model=OrderResponse,
+    response_model_exclude_none=True,
 )
 def get_order(order_id: str):
     """Get an order from the database."""
@@ -38,14 +45,16 @@ def get_order(order_id: str):
     return db.orders[order_id]
 
 
-@router.get("/", response_model=List[Order], response_model_exclude_none=True)
+@router.get(
+    "/", response_model=List[OrderResponse], response_model_exclude_none=True
+)
 def get_orders_for_customer(
     customer_id: str = Query(..., description="Customer ID")
 ):
     """Get all orders from the customer"""
 
     orders = []
-    for order in db.orders:
+    for _, order in db.orders.items():
         if order["customer_id"] == customer_id:
             orders.append(order)
 
@@ -54,7 +63,7 @@ def get_orders_for_customer(
 
 @router.put(
     "/order_id}/status/{status}",
-    response_model=Order,
+    response_model=OrderResponse,
     response_model_exclude_none=True,
 )
 def update_order_status(
@@ -83,4 +92,4 @@ def cancel_order(order_id: str):
         )
 
     del db.orders[order_id]
-    return {"message": "Order deleted successfully"}
+    return {"message": "Order cancelled successfully"}

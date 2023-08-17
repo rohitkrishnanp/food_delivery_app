@@ -10,6 +10,7 @@ router = APIRouter()
 
 @router.post(
     "/{restaurant_id}/menus",
+    status_code=201,
     response_model=MenuResponse,
     response_model_exclude_none=True,
 )
@@ -57,7 +58,7 @@ def get_menus(restaurant_id: str):
     for _, menu in db.menu.items():
         if menu["restaurant_id"] == restaurant_id:
             menus.append(menu)
-    return menu
+    return menus
 
 
 @router.get(

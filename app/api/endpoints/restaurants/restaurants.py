@@ -9,7 +9,12 @@ from app.storage import db
 router = APIRouter()
 
 
-@router.post("/", response_model=RestaurantResponse, response_model_exclude_none=True)
+@router.post(
+    "/",
+    status_code=201,
+    response_model=RestaurantResponse,
+    response_model_exclude_none=True,
+)
 def create_restaurant(restaurant: Restaurant):
     """Add a new restaurant to the database"""
 
@@ -19,7 +24,11 @@ def create_restaurant(restaurant: Restaurant):
     return response
 
 
-@router.get("/{restaurant_id}", response_model=RestaurantResponse, response_model_exclude_none=True)
+@router.get(
+    "/{restaurant_id}",
+    response_model=RestaurantResponse,
+    response_model_exclude_none=True,
+)
 def get_restaurant(restaurant_id: str):
     """Get a restaurant from the database"""
 
@@ -49,7 +58,11 @@ def get_restaurants_nearby(
     return list_of_restaurants
 
 
-@router.put("/{restaurant_id}", response_model=RestaurantResponse, response_model_exclude_none=True)
+@router.put(
+    "/{restaurant_id}",
+    response_model=RestaurantResponse,
+    response_model_exclude_none=True,
+)
 def update_restaurant(restaurant_id: str, restaurant: Restaurant):
     """Update a restaurant in the database"""
 

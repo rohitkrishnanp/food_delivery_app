@@ -2,16 +2,6 @@
  _transform: true
 
  services:
- - host: mockbin.org
-   name: example_service
-   port: 80
-   protocol: http
-   routes:
-   - name: example_route
-     paths:
-     - /mock
-     strip_path: true
-  
  - host: host.docker.internal
    name: user_service
    port: 5003
