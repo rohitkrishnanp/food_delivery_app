@@ -22,7 +22,9 @@ To shutdown
 
 ## API Documentation  
 The api documentation can be found in  
-<url_path>:<port>/docs
+<url_path>:<port>/docs  
+It is also hosted here  
+https://app.swaggerhub.com/apis-docs/ROHITKRISHNANP_1/food-delivery_application/1.0.0
 
 ## Development Setup
 
